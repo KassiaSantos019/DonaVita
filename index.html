@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dona Vita - Conectando Solidariedade e Salvando Vidas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        brand: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        palette: {
+                            rose: '#E8C5C8',      // Dusty Rose
+                            cream: '#FFF6EE',     // Off-white Creme
+                            wine: '#8C2327',      // Vermelho Vinho / Burgundy
+                            espresso: '#241512',  // Marrom / Preto Profundo
+                            coral: '#FC787A',     // Coral Vibrante
+                            badge: '#DCE4F7'      // Soft Lavender Blue
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-palette-cream text-palette-espresso font-sans antialiased selection:bg-palette-wine selection:text-white">
+
+    <header class="sticky top-0 z-50 bg-palette-cream/95 backdrop-blur-md border-b border-palette-rose/40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
+            
+            <!-- Dona Vita Logo -->
+            <div class="cursor-pointer flex items-center py-2" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="relative flex items-center h-16 sm:h-20 w-auto">
+                    <img src="Logo.png" alt="Dona Vita Logo" class="h-16 sm:h-20 w-auto object-contain filter drop-shadow-sm">
+                </div>
+            </div>
+            
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex space-x-7 font-semibold text-palette-espresso/80 text-sm">
+                <a href="#estoque-grafico" class="hover:text-palette-wine transition-colors"><i class="fa-solid fa-chart-column text-palette-coral mr-1"></i> Necessidade Sangue</a>
+                <a href="#como-funciona" class="hover:text-palette-wine transition-colors">Como Funciona</a>
+                <a href="#elegibilidade" class="hover:text-palette-wine transition-colors">Posso Doar?</a>
+                <a href="#locais" class="hover:text-palette-wine transition-colors">Bancos de Sangue</a>
+                <a href="#mural" class="hover:text-palette-wine transition-colors">Dicas & Mitos</a>
+            </nav>
+
+            <a href="#locais" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-palette-wine text-white font-bold text-sm hover:bg-palette-wine/90 shadow-md hover:shadow-palette-wine/20 transition-all duration-200">
+                <i class="fa-solid fa-location-dot mr-2 text-palette-coral"></i> Encontrar Posto
+            </a>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="lg:hidden text-palette-espresso hover:text-palette-wine p-2" aria-label="Abrir menu">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden border-b border-palette-rose/40 bg-palette-cream px-4 pt-2 pb-4 space-y-2 text-palette-espresso">
+            <a href="#estoque-grafico" class="block py-2 text-sm font-bold text-palette-wine"><i class="fa-solid fa-chart-column mr-1"></i> Necessidade de Sangue</a>
+            <a href="#como-funciona" class="block py-2 text-sm font-semibold hover:text-palette-wine">Como Funciona</a>
+            <a href="#elegibilidade" class="block py-2 text-sm font-semibold hover:text-palette-wine">Posso Doar?</a>
+            <a href="#locais" class="block py-2 text-sm font-semibold hover:text-palette-wine">Bancos de Sangue</a>
+            <a href="#mural" class="block py-2 text-sm font-semibold hover:text-palette-wine">Dicas & Mitos</a>
+        </div>
+    </header>
+
+    <section class="relative overflow-hidden bg-gradient-to-b from-palette-badge/30 via-palette-cream to-white py-12 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-12 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-palette-badge/60 text-palette-espresso text-xs sm:text-sm font-bold border border-palette-rose">
+                        <span class="w-2.5 h-2.5 rounded-full bg-palette-wine animate-ping"></span>
+                        <span>Dona Vita • Conectando Sangue a Vidas</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-palette-espresso tracking-tight leading-tight">
+                        Um Batimento Salva.<br class="hidden sm:inline"/>
+                        <span class="text-palette-wine">Sua Doação Transforma.</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-palette-espresso/80 max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                        Acompanhe os níveis críticos de estoques por tipo sanguíneo, encontre o hemocentro mais próximo de sua cidade e agende seu ato de amor.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#estoque-grafico" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-palette-wine hover:bg-palette-wine/90 text-white font-bold text-base shadow-lg shadow-palette-wine/20 hover:scale-[1.02] active:scale-[0.98] transition-all text-center">
+                            <i class="fa-solid fa-chart-line mr-2 text-palette-coral"></i> Ver Gráfico de Necessidade
+                        </a>
+                        <a href="#locais" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white hover:bg-palette-cream text-palette-espresso font-bold text-base border border-palette-rose/60 shadow-sm transition-all text-center">
+                            <i class="fa-solid fa-map-location-dot mr-2 text-palette-wine"></i> Buscar Hemocentro
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Section -->
+            <div class="mt-14 pt-10 border-t border-palette-rose/40">
+                <div class="text-center mb-6">
+                    <span class="text-xs font-extrabold text-palette-wine tracking-widest uppercase bg-palette-rose/30 px-3 py-1 rounded-full border border-palette-rose/50">Acesso Rápido</span>
+                    <h2 class="text-xl font-bold text-palette-espresso mt-2">O que você procura hoje?</h2>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+                    <a href="#estoque-grafico" class="bg-white p-5 rounded-2xl border border-palette-rose/60 hover:border-palette-wine hover:shadow-md transition-all text-center group flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-xl bg-palette-rose/30 group-hover:bg-palette-wine text-palette-wine group-hover:text-white flex items-center justify-center text-xl mb-3 transition-colors">
+                            <i class="fa-solid fa-chart-column"></i>
+                        </div>
+                        <span class="text-sm font-bold text-palette-espresso group-hover:text-palette-wine transition-colors">Gráfico de Necessidade</span>
+                        <span class="text-[11px] text-palette-espresso/60 font-medium mt-1">Urgência por tipo</span>
+                    </a>
+
+                    <a href="#elegibilidade" class="bg-white p-5 rounded-2xl border border-palette-rose/60 hover:border-palette-wine hover:shadow-md transition-all text-center group flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-xl bg-palette-rose/30 group-hover:bg-palette-wine text-palette-wine group-hover:text-white flex items-center justify-center text-xl mb-3 transition-colors">
+                            <i class="fa-solid fa-clipboard-question"></i>
+                        </div>
+                        <span class="text-sm font-bold text-palette-espresso group-hover:text-palette-wine transition-colors">Posso Doar?</span>
+                        <span class="text-[11px] text-palette-espresso/60 font-medium mt-1">Simulador de Requisitos</span>
+                    </a>
+
+                    <a href="#locais" class="bg-white p-5 rounded-2xl border border-palette-rose/60 hover:border-palette-wine hover:shadow-md transition-all text-center group flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-xl bg-palette-rose/30 group-hover:bg-palette-wine text-palette-wine group-hover:text-white flex items-center justify-center text-xl mb-3 transition-colors">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <span class="text-sm font-bold text-palette-espresso group-hover:text-palette-wine transition-colors">Bancos de Sangue</span>
+                        <span class="text-[11px] text-palette-espresso/60 font-medium mt-1">Encontre seu Hemocentro</span>
+                    </a>
+
+                    <a href="#mural" class="bg-white p-5 rounded-2xl border border-palette-rose/60 hover:border-palette-wine hover:shadow-md transition-all text-center group flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-xl bg-palette-rose/30 group-hover:bg-palette-wine text-palette-wine group-hover:text-white flex items-center justify-center text-xl mb-3 transition-colors">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <span class="text-sm font-bold text-palette-espresso group-hover:text-palette-wine transition-colors">Dicas & Mitos</span>
+                        <span class="text-[11px] text-palette-espresso/60 font-medium mt-1">Tabela & Cuidados</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="estoque-grafico" class="py-16 bg-white border-t border-b border-palette-rose/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-palette-wine font-bold text-sm tracking-wider uppercase bg-palette-rose/30 px-3 py-1 rounded-full border border-palette-rose/50">Níveis de Urgência</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-palette-espresso mt-3">Gráfico de Necessidade por Tipo Sanguíneo</h2>
+                <p class="text-palette-espresso/70 mt-2 text-base font-medium">
+                    Veja os tipos sanguíneos com maior urgência nos bancos de sangue cadastrados. Quanto maior a porcentagem, mais crítica é a necessidade de doação.
+                </p>
+            </div>
+
+            <div class="bg-palette-cream p-6 sm:p-10 rounded-3xl border border-palette-rose/60 shadow-sm max-w-5xl mx-auto">
+                <div class="flex flex-col lg:flex-row items-center justify-between mb-8 pb-6 border-b border-palette-rose/50 gap-4">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-palette-espresso">
+                        <span class="w-3 h-3 rounded-full bg-palette-wine"></span><span>Crítico (Doação Urgente)</span>
+                        <span class="w-3 h-3 rounded-full bg-amber-500 ml-3"></span><span>Alerta (Estoque Baixo)</span>
+                        <span class="w-3 h-3 rounded-full bg-emerald-600 ml-3"></span><span>Estável (Apenas Manutenção)</span>
+                    </div>
+
+                    <!-- Region Selector Filter -->
+                    <div class="flex items-center space-x-2 w-full sm:w-auto">
+                        <label for="chart-region-filter" class="text-xs font-bold text-palette-espresso uppercase whitespace-nowrap">Filtrar por Região:</label>
+                        <select id="chart-region-filter" onchange="updateBloodChart()" class="bg-white border border-palette-rose/80 text-palette-espresso text-xs font-bold rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-palette-wine w-full">
+                            <option value="geral">Média Geral (Brasil)</option>
+                            <option value="SP">Estado de São Paulo (SP)</option>
+                            <option value="RJ">Estado do Rio de Janeiro (RJ)</option>
+                            <option value="MG">Estado de Minas Gerais (MG)</option>
+                            <option value="PR">Estado do Paraná (PR)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dynamic Chart Container -->
+                <div class="space-y-5" id="blood-chart-container"></div>
+
+                <!-- Callout Banner -->
+                <div class="mt-10 bg-palette-badge/50 p-4 sm:p-6 rounded-2xl border border-palette-rose/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-2xl bg-palette-wine text-white flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-hand-holding-medical text-palette-coral"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-palette-espresso text-sm sm:text-base">Seu tipo sanguíneo está na faixa crítica?</h4>
+                            <p class="text-xs text-palette-espresso/70 font-medium">Os doadores de tipos O- e O+ são os mais solicitados para cirurgias e emergências hospitalares.</p>
+                        </div>
+                    </div>
+                    <a href="#locais" class="px-5 py-2.5 rounded-xl bg-palette-wine text-white text-xs font-bold whitespace-nowrap hover:bg-palette-wine/90 transition-all shadow-md">
+                        Doar Agora
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="py-20 bg-palette-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-palette-wine font-bold text-sm tracking-wider uppercase">Simples, Rápido e Seguro</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-palette-espresso mt-2">Como Funciona o Processo Dona Vita?</h2>
+                <p class="text-palette-espresso/70 mt-4 text-base font-medium">Todo o caminho da doação é acompanhado por profissionais capacitados, garantindo total conforto e biossegurança.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="relative bg-white p-6 rounded-2xl border border-palette-rose/50 hover:shadow-lg transition-all group">
+                    <div class="w-14 h-14 rounded-2xl bg-palette-wine text-white flex items-center justify-center text-2xl font-bold mb-6 shadow-md shadow-palette-wine/20 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-id-card text-palette-coral"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-palette-wine uppercase tracking-widest">Etapa 1 • ~10 min</span>
+                    <h3 class="text-xl font-bold text-palette-espresso mt-1 mb-2">Recepção & Cadastro</h3>
+                    <p class="text-palette-espresso/70 text-sm leading-relaxed font-medium">Apresentação de documento oficial com foto, atualização de dados de contato e registro no sistema do hemocentro.</p>
+                </div>
+
+                <div class="relative bg-white p-6 rounded-2xl border border-palette-rose/50 hover:shadow-lg transition-all group">
+                    <div class="w-14 h-14 rounded-2xl bg-palette-wine text-white flex items-center justify-center text-2xl font-bold mb-6 shadow-md shadow-palette-wine/20 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-user-doctor text-palette-coral"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-palette-wine uppercase tracking-widest">Etapa 2 • ~15 min</span>
+                    <h3 class="text-xl font-bold text-palette-espresso mt-1 mb-2">Triagem Clínica</h3>
+                    <p class="text-palette-espresso/70 text-sm leading-relaxed font-medium">Entrevista confidencial para avaliar seu estado de saúde, checagem de sinais vitais, pressão arterial e teste de hemoglobina.</p>
+                </div>
+
+                <div class="relative bg-white p-6 rounded-2xl border border-palette-rose/50 hover:shadow-lg transition-all group">
+                    <div class="w-14 h-14 rounded-2xl bg-palette-wine text-white flex items-center justify-center text-2xl font-bold mb-6 shadow-md shadow-palette-wine/20 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-heart-pulse text-palette-coral"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-palette-wine uppercase tracking-widest">Etapa 3 • ~10 a 15 min</span>
+                    <h3 class="text-xl font-bold text-palette-espresso mt-1 mb-2">A Coleta</h3>
+                    <p class="text-palette-espresso/70 text-sm leading-relaxed font-medium">Coleta de aproximadamente 450 ml de sangue com material 100% descartável, estéril e sob supervisão especializada.</p>
+                </div>
+
+                <div class="relative bg-white p-6 rounded-2xl border border-palette-rose/50 hover:shadow-lg transition-all group">
+                    <div class="w-14 h-14 rounded-2xl bg-palette-wine text-white flex items-center justify-center text-2xl font-bold mb-6 shadow-md shadow-palette-wine/20 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-cookie-bite text-palette-coral"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-palette-wine uppercase tracking-widest">Etapa 4 • ~15 min</span>
+                    <h3 class="text-xl font-bold text-palette-espresso mt-1 mb-2">Lanche & Repouso</h3>
+                    <p class="text-palette-espresso/70 text-sm leading-relaxed font-medium">Momento de relaxar, hidratar-se e desfrutar do lanche oferecido para restabelecer os níveis de energia do seu corpo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="elegibilidade" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-palette-cream rounded-3xl shadow-xl border border-palette-rose/60 overflow-hidden">
+                <div class="bg-palette-wine px-6 py-8 text-white text-center">
+                    <h2 class="text-2xl sm:text-3xl font-bold"><i class="fa-solid fa-clipboard-check mr-2 text-palette-coral"></i> Simulador Dona Vita: Posso Doar Hoje?</h2>
+                    <p class="text-palette-rose text-sm mt-2 font-medium">Responda a 5 perguntas rápidas e descubra sua aptidão prévia para doação.</p>
+                </div>
+
+                <div class="p-6 sm:p-10" id="quiz-container">
+                    <div class="mb-8">
+                        <div class="flex justify-between text-xs font-extrabold text-palette-espresso/60 mb-2">
+                            <span id="quiz-progress-text">PERGUNTA 1 DE 5</span>
+                            <span id="quiz-progress-percent">20%</span>
+                        </div>
+                        <div class="w-full bg-white h-2.5 rounded-full overflow-hidden border border-palette-rose/30">
+                            <div id="quiz-progress-bar" class="bg-gradient-to-r from-palette-wine to-palette-coral h-full transition-all duration-300" style="width: 20%"></div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-question-box" class="space-y-6"></div>
+
+                    <div id="quiz-result-box" class="hidden text-center space-y-6 py-4">
+                        <div id="quiz-result-icon" class="w-20 h-20 mx-auto rounded-full flex items-center justify-center text-4xl"></div>
+                        <h3 id="quiz-result-title" class="text-2xl font-bold"></h3>
+                        <p id="quiz-result-desc" class="text-palette-espresso/80 max-w-lg mx-auto text-sm leading-relaxed font-medium"></p>
+                        
+                        <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
+                            <button onclick="resetQuiz()" class="px-6 py-3 rounded-xl border border-palette-rose text-palette-espresso font-bold hover:bg-white text-sm transition-all">
+                                Refazer Teste
+                            </button>
+                            <a href="#locais" class="px-6 py-3 rounded-xl bg-palette-wine hover:bg-palette-wine/90 text-white font-bold text-sm transition-all shadow-md">
+                                Ver Postos de Coleta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="locais" class="py-20 bg-palette-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-palette-wine font-bold text-sm tracking-wider uppercase">Localize & Agende</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-palette-espresso mt-2">Bancos de Sangue & Hemocentros</h2>
+                    <p class="text-palette-espresso/70 mt-2 text-base font-medium">Pesquise por sua cidade e confira o nível do estoque de sangue em tempo real.</p>
+                </div>
+
+                <div class="mt-6 md:mt-0 w-full md:w-80">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-palette-wine/50"></i>
+                        <input type="text" id="city-search-input" onkeyup="filterBloodBanks()" placeholder="Digite a cidade (ex: Itapetininga, SP)" class="w-full pl-11 pr-4 py-3 rounded-xl border border-palette-rose/70 bg-white focus:outline-none focus:ring-2 focus:ring-palette-wine text-sm text-palette-espresso font-medium shadow-sm transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="hemocentros-list"></div>
+        </div>
+    </section>
+
+    <section id="mural" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-palette-wine font-bold text-sm tracking-wider uppercase">Conhecimento Vital Dona Vita</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-palette-espresso mt-2">Mural de Dicas & Compatibilidade</h2>
+            </div>
+
+            <div class="flex justify-center border-b border-palette-rose/50 mb-8 overflow-x-auto">
+                <div class="flex space-x-4 sm:space-x-8">
+                    <button onclick="switchTab('compatibilidade')" id="tab-btn-compatibilidade" class="tab-btn font-bold text-sm pb-4 border-b-2 border-palette-wine text-palette-wine transition-colors whitespace-nowrap">
+                        <i class="fa-solid fa-diagram-project mr-2"></i>Tabela de Compatibilidade
+                    </button>
+                    <button onclick="switchTab('mitos')" id="tab-btn-mitos" class="tab-btn font-medium text-sm text-palette-espresso/60 hover:text-palette-espresso pb-4 border-b-2 border-transparent transition-colors whitespace-nowrap">
+                        <i class="fa-solid fa-lightbulb mr-2"></i>Mitos vs Verdades
+                    </button>
+                    <button onclick="switchTab('dicas')" id="tab-btn-dicas" class="tab-btn font-medium text-sm text-palette-espresso/60 hover:text-palette-espresso pb-4 border-b-2 border-transparent transition-colors whitespace-nowrap">
+                        <i class="fa-solid fa-heart-circle-check mr-2"></i>Dicas Pré e Pós
+                    </button>
+                </div>
+            </div>
+
+            <div id="tab-contents">
+                <div id="content-compatibilidade" class="tab-content block">
+                    <div class="bg-palette-cream rounded-2xl p-6 sm:p-8 shadow-sm border border-palette-rose/50 overflow-x-auto">
+                        <h3 class="text-lg font-bold text-palette-espresso mb-4 text-center">Matriz de Transfusão Sanguínea</h3>
+                        <table class="w-full text-center border-collapse min-w-[500px]">
+                            <thead>
+                                <tr class="bg-white text-palette-espresso font-extrabold text-xs uppercase tracking-wider">
+                                    <th class="p-3 border border-palette-rose/40">Tipo Sanguíneo</th>
+                                    <th class="p-3 border border-palette-rose/40">Pode Doar Para</th>
+                                    <th class="p-3 border border-palette-rose/40">Pode Receber De</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm font-medium text-palette-espresso">
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-extrabold text-palette-wine bg-palette-rose/20">O-</td>
+                                    <td class="p-3 border border-palette-rose/30"><span class="px-2.5 py-1 bg-emerald-100 text-emerald-900 rounded font-bold text-xs">Todos (Doador Universal)</span></td>
+                                    <td class="p-3 border border-palette-rose/30">Apenas O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-bold">O+</td>
+                                    <td class="p-3 border border-palette-rose/30">A+, B+, AB+, O+</td>
+                                    <td class="p-3 border border-palette-rose/30">O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-bold">A-</td>
+                                    <td class="p-3 border border-palette-rose/30">A+, A-, AB+, AB-</td>
+                                    <td class="p-3 border border-palette-rose/30">A-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-bold">A+</td>
+                                    <td class="p-3 border border-palette-rose/30">AB+, A+</td>
+                                    <td class="p-3 border border-palette-rose/30">A+, A-, O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-bold">B-</td>
+                                    <td class="p-3 border border-palette-rose/30">B+, B-, AB+, AB-</td>
+                                    <td class="p-3 border border-palette-rose/30">B-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-bold">B+</td>
+                                    <td class="p-3 border border-palette-rose/30">B+, AB+</td>
+                                    <td class="p-3 border border-palette-rose/30">B+, B-, O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-bold">AB-</td>
+                                    <td class="p-3 border border-palette-rose/30">AB+, AB-</td>
+                                    <td class="p-3 border border-palette-rose/30">A-, B-, AB-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60">
+                                    <td class="p-3 border border-palette-rose/30 font-extrabold text-palette-wine bg-palette-rose/20">AB+</td>
+                                    <td class="p-3 border border-palette-rose/30">Apenas AB+</td>
+                                    <td class="p-3 border border-palette-rose/30"><span class="px-2.5 py-1 bg-emerald-100 text-emerald-900 rounded font-bold text-xs">Todos (Receptor Universal)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="content-mitos" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-palette-cream p-6 rounded-2xl border border-palette-rose/50 shadow-sm space-y-2">
+                        <div class="inline-flex items-center space-x-2 text-palette-wine font-bold text-sm">
+                            <i class="fa-solid fa-circle-xmark"></i> <span>MITO</span>
+                        </div>
+                        <h4 class="font-bold text-palette-espresso text-base">"Doar sangue afina ou engrossa o sangue."</h4>
+                        <p class="text-palette-espresso/70 text-sm font-medium">O sangue mantém exatamente a mesma densidade. O organismo repõe o volume de líquido doado nas primeiras 24 horas.</p>
+                    </div>
+
+                    <div class="bg-palette-cream p-6 rounded-2xl border border-palette-rose/50 shadow-sm space-y-2">
+                        <div class="inline-flex items-center space-x-2 text-emerald-700 font-bold text-sm">
+                            <i class="fa-solid fa-circle-check"></i> <span>VERDADE</span>
+                        </div>
+                        <h4 class="font-bold text-palette-espresso text-base">"Quem tem tatuagem pode doar sangue."</h4>
+                        <p class="text-palette-espresso/70 text-sm font-medium">Sim! É necessário apenas aguardar o prazo de 6 a 12 meses após a realização da tatuagem ou maquiagem definitiva.</p>
+                    </div>
+
+                    <div class="bg-palette-cream p-6 rounded-2xl border border-palette-rose/50 shadow-sm space-y-2">
+                        <div class="inline-flex items-center space-x-2 text-palette-wine font-bold text-sm">
+                            <i class="fa-solid fa-circle-xmark"></i> <span>MITO</span>
+                        </div>
+                        <h4 class="font-bold text-palette-espresso text-base">"O doador corre risco de contaminação."</h4>
+                        <p class="text-palette-espresso/70 text-sm font-medium">Zero risco! Todo material utilizado (agulhas, bolsas, tubos) é totalmente descartável, estéril e de uso único.</p>
+                    </div>
+
+                    <div class="bg-palette-cream p-6 rounded-2xl border border-palette-rose/50 shadow-sm space-y-2">
+                        <div class="inline-flex items-center space-x-2 text-emerald-700 font-bold text-sm">
+                            <i class="fa-solid fa-circle-check"></i> <span>VERDADE</span>
+                        </div>
+                        <h4 class="font-bold text-palette-espresso text-base">"O trabalhador tem direito a 1 dia de folga."</h4>
+                        <p class="text-palette-espresso/70 text-sm font-medium">Pela CLT (Art. 473), o empregado pode se ausentar do trabalho por 1 dia a cada 12 meses para doação de sangue sem desconto no salário.</p>
+                    </div>
+                </div>
+
+                <div id="content-dicas" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-palette-cream p-6 rounded-2xl border border-palette-rose/50 shadow-sm">
+                        <h4 class="font-bold text-palette-espresso text-lg mb-4 text-palette-wine flex items-center">
+                            <i class="fa-solid fa-circle-chevron-right mr-2 text-palette-coral"></i> Antes da Doação
+                        </h4>
+                        <ul class="space-y-3 text-sm text-palette-espresso/80 font-medium">
+                            <li class="flex items-start"><i class="fa-solid fa-check text-emerald-600 mt-1 mr-2"></i> Dormir bem (pelo menos 6 horas de sono na noite anterior).</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-emerald-600 mt-1 mr-2"></i> Estar bem alimentado (evitar alimentos gordurosos 4h antes).</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-emerald-600 mt-1 mr-2"></i> Beber bastante água nos momentos que antecedem a doação.</li>
+                            <li class="flex items-start"><i class="fa-solid fa-xmark text-palette-wine mt-1 mr-2"></i> Não ingerir bebidas alcoólicas nas 12 horas anteriores.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-palette-cream p-6 rounded-2xl border border-palette-rose/50 shadow-sm">
+                        <h4 class="font-bold text-palette-espresso text-lg mb-4 text-palette-wine flex items-center">
+                            <i class="fa-solid fa-circle-chevron-right mr-2 text-palette-coral"></i> Após a Doação
+                        </h4>
+                        <ul class="space-y-3 text-sm text-palette-espresso/80 font-medium">
+                            <li class="flex items-start"><i class="fa-solid fa-check text-emerald-600 mt-1 mr-2"></i> Consumir o lanche e sucos oferecidos no posto.</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-emerald-600 mt-1 mr-2"></i> Evitar esforços físicos intensos ou exercícios no mesmo dia.</li>
+                            <li class="flex items-start"><i class="fa-solid fa-check text-emerald-600 mt-1 mr-2"></i> Manter o curativo no braço por no mínimo 4 horas.</li>
+                            <li class="flex items-start"><i class="fa-solid fa-xmark text-palette-wine mt-1 mr-2"></i> Não fumar por pelo menos 2 horas após a coleta.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="depoimentos" class="py-20 bg-palette-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-palette-wine font-bold text-sm tracking-wider uppercase">Vozes da Solidariedade</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-palette-espresso mt-2">Mural Dona Vita de Depoimentos</h2>
+                <p class="text-palette-espresso/70 mt-2 text-base font-medium">Veja como pequenos gestos mantêm os batimentos do mundo vivos. Deixe seu relato também!</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12" id="stories-grid"></div>
+
+            <div class="max-w-2xl mx-auto bg-white border border-palette-rose/60 p-6 sm:p-8 rounded-3xl shadow-sm">
+                <h3 class="text-xl font-bold text-palette-espresso mb-2 text-center">Deixe sua mensagem no Mural Dona Vita</h3>
+                <p class="text-xs text-palette-espresso/60 text-center mb-6 font-medium">Seu depoimento impulsiona mais pessoas a doarem!</p>
+                
+                <form id="story-form" onsubmit="handleStorySubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-palette-espresso uppercase mb-1">Seu Nome</label>
+                        <input type="text" id="story-author" required placeholder="Ex: Maria Silva" class="w-full px-4 py-2.5 rounded-xl border border-palette-rose/70 text-sm focus:outline-none focus:ring-2 focus:ring-palette-wine">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-palette-espresso uppercase mb-1">Seu Perfil</label>
+                        <select id="story-role" class="w-full px-4 py-2.5 rounded-xl border border-palette-rose/70 text-sm focus:outline-none focus:ring-2 focus:ring-palette-wine">
+                            <option value="Doador Frequente">Doador Frequente</option>
+                            <option value="Doador de Primeira Viagem">Doador de Primeira Viagem</option>
+                            <option value="Receptor Agradecido">Receptor / Familiar</option>
+                            <option value="Apoiador da Causa">Apoiador Dona Vita</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-palette-espresso uppercase mb-1">Sua Mensagem</label>
+                        <textarea id="story-text" required rows="3" placeholder="Escreva aqui seu depoimento..." class="w-full px-4 py-2.5 rounded-xl border border-palette-rose/70 text-sm focus:outline-none focus:ring-2 focus:ring-palette-wine"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-palette-wine hover:bg-palette-wine/90 text-white font-bold rounded-xl text-sm transition-all shadow-md">
+                        Publicar no Mural Dona Vita
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-palette-espresso text-palette-rose/80 py-12 border-t border-palette-espresso/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="space-y-4 md:col-span-2">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl font-bold text-white font-brand">Dona<span class="text-palette-coral"> Vita</span></span>
+                </div>
+                <p class="text-xs text-palette-cream/70 max-w-sm leading-relaxed font-medium">
+                    Plataforma Dona Vita de conscientização e facilitação para doação de sangue no Brasil. Conectando doadores a quem precisa de vida.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-white text-sm font-bold mb-3">Links Rápidos</h4>
+                <ul class="space-y-2 text-xs font-medium">
+                    <li><a href="#estoque-grafico" class="hover:text-palette-coral transition-colors">Urgência de Sangue</a></li>
+                    <li><a href="#como-funciona" class="hover:text-palette-coral transition-colors">Como Funciona</a></li>
+                    <li><a href="#elegibilidade" class="hover:text-palette-coral transition-colors">Simulador de Elegibilidade</a></li>
+                    <li><a href="#locais" class="hover:text-palette-coral transition-colors">Bancos de Sangue</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white text-sm font-bold mb-3">Em Emergências</h4>
+                <p class="text-xs text-palette-cream/70 leading-relaxed mb-2 font-medium">Em caso de emergência ou necessidade imediata de sangue, dirija-se ao hemocentro público mais próximo de sua cidade.</p>
+                <span class="text-xs font-extrabold text-palette-coral">SUS - Disque Saúde: 136</span>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-white/10 text-center text-xs text-palette-rose/60">
+            <p>&copy; 2026 Dona Vita. Todos os direitos reservados. Projeto social de incentivo à vida.</p>
+        </div>
+    </footer>
+
+    <!-- Script Integration -->
+    <script src="script.js"></script>
+</body>
+</html>
