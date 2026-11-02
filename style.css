@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+body {
+background-color: #FFF8F4;
+color: #2B1810;
+font-family: 'Inter', sans-serif;
+}
+
+.modal-backdrop {
+background-color: rgba(43, 24, 16, 0.5);
+backdrop-filter: blur(4px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+width: 8px;
+}
+
+::-webkit-scrollbar-track {
+background: #FFF8F4;
+}
+
+::-webkit-scrollbar-thumb {
+background: #D8B4A0;
+border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+background: #8C1D24;
+}
+
+  .Logo {
+  display: inline-block;
+  width: 150px;
+}

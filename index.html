@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dona Vita • Conectando Sangue a Vidas</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Client library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Arquivo CSS Externo -->
+    <link rel="stylesheet" href="style.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#FFF8F4',
+                            cardBg: '#FFFDFB',
+                            primary: '#8C1D24', // Vinho / Red primary
+                            primaryDark: '#6D151B',
+                            accent: '#C53030',
+                            cream: '#FDF3EB',
+                            textDark: '#2B1810',
+                            textMuted: '#6B584E',
+                            statusCritical: '#8C1D24',
+                            statusAlert: '#DD6B20',
+                            statusStable: '#38A169',
+                            statusLightGreen: '#E6FFFA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- NAVBAR TOP -->
+    <header class="sticky top-0 z-40 bg-[#FFF8F4]/90 backdrop-blur-md border-b border-[#F5E6DC] shadow-sm transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo Dona Vita -->
+            <a href="#" class="Logo">
+               <img src="Logo.png" alt="Dona Vita" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            </a>
+
+            <!-- Menu de Navegação Principal -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-brand-textDark">
+                <a href="#necessidade" class="flex items-center gap-1.5 hover:text-brand-primary transition-colors py-1">
+                    <i class="fa-solid fa-chart-simple text-brand-primary"></i> Necessidade Sangue
+                </a>
+                <a href="#como-funciona" class="hover:text-brand-primary transition-colors py-1">Como Funciona</a>
+                <a href="#posso-doar" class="hover:text-brand-primary transition-colors py-1">Posso Doar?</a>
+                <a href="#bancos-sangue" class="hover:text-brand-primary transition-colors py-1">Bancos de Sangue</a>
+                <a href="#dicas-mitos" class="hover:text-brand-primary transition-colors py-1">Dicas & Mitos</a>
+                <a href="#mural" class="flex items-center gap-1.5 hover:text-brand-primary transition-colors py-1">
+                    <i class="fa-regular fa-image text-brand-primary"></i> Mural
+                </a>
+            </nav>
+
+            <!-- Ações de Autenticação / Perfil do Usuário -->
+            <div class="flex items-center gap-3">
+                <div id="loggedOutState" class="flex items-center gap-2">
+                    <button onclick="window.openAuthModal('login')" class="px-5 py-2.5 rounded-full border-2 border-brand-primary text-brand-primary font-bold text-sm hover:bg-brand-primary hover:text-white transition-all duration-200">
+                        Entrar
+                    </button>
+                    <button onclick="window.openAuthModal('register')" class="px-5 py-2.5 rounded-full bg-brand-primary text-white font-bold text-sm hover:bg-brand-primaryDark transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-user-plus text-xs"></i> Cadastrar-se
+                    </button>
+                </div>
+
+                <!-- Estado Logado (Oculto Inicialmente) -->
+                <div id="loggedInState" class="hidden flex items-center gap-3">
+                    <div class="flex items-center gap-2 bg-brand-cream px-3 py-1.5 rounded-full border border-[#EACEC1]">
+                        <span id="userBadgeType" class="text-xs font-bold px-2 py-0.5 rounded-full bg-brand-primary text-white">Doador</span>
+                        <span id="userNameDisplay" class="text-sm font-bold text-brand-textDark">Maria Silva</span>
+                    </div>
+                    <button onclick="window.logout()" title="Sair da Conta" class="w-9 h-9 rounded-full bg-gray-200 text-gray-700 hover:bg-red-100 hover:text-red-700 flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Botão Menu Mobile -->
+                <button onclick="window.toggleMobileMenu()" class="md:hidden p-2 text-brand-textDark hover:text-brand-primary">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Mobile Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden bg-[#FFF8F4] border-b border-[#F5E6DC] px-4 pt-2 pb-6 space-y-3 font-medium">
+            <a href="#necessidade" onclick="window.toggleMobileMenu()" class="block py-2 text-brand-textDark hover:text-brand-primary"><i class="fa-solid fa-chart-simple mr-2 text-brand-primary"></i>Necessidade Sangue</a>
+            <a href="#como-funciona" onclick="window.toggleMobileMenu()" class="block py-2 text-brand-textDark hover:text-brand-primary">Como Funciona</a>
+            <a href="#posso-doar" onclick="window.toggleMobileMenu()" class="block py-2 text-brand-textDark hover:text-brand-primary">Posso Doar?</a>
+            <a href="#bancos-sangue" onclick="window.toggleMobileMenu()" class="block py-2 text-brand-textDark hover:text-brand-primary">Bancos de Sangue</a>
+            <a href="#dicas-mitos" onclick="window.toggleMobileMenu()" class="block py-2 text-brand-textDark hover:text-brand-primary">Dicas & Mitos</a>
+            <a href="#mural" onclick="window.toggleMobileMenu()" class="block py-2 text-brand-textDark hover:text-brand-primary"><i class="fa-regular fa-image mr-2 text-brand-primary"></i>Mural Dona Vita</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <!-- SEÇÃO HERO -->
+        <section class="py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-cream border border-[#F0D5C7] text-brand-primary text-xs font-bold uppercase tracking-wider mb-8">
+                <span class="w-2 h-2 rounded-full bg-brand-primary animate-ping"></span>
+                Dona Vita • Conectando Sangue a Vidas
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-black text-brand-textDark tracking-tight leading-tight max-w-4xl mx-auto">
+                Um Batimento Salva.<br>
+                <span class="text-brand-primary">Sua Doação Transforma.</span>
+            </h1>
+
+            <p class="mt-6 text-lg sm:text-xl text-brand-textMuted max-w-2xl mx-auto font-normal">
+                Acompanhe os níveis críticos de estoques por tipo sanguíneo, encontre o hemocentro mais próximo de sua cidade e agende seu ato de amor.
+            </p>
+
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#necessidade" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-primary text-white font-bold text-base hover:bg-brand-primaryDark transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-chart-line text-lg"></i> Ver Gráfico de Necessidade
+                </a>
+                <a href="#bancos-sangue" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white border border-[#E5CEC0] text-brand-textDark font-bold text-base hover:bg-brand-cream transition-all duration-200 shadow-sm flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-map-location-dot text-brand-primary text-lg"></i> Buscar Hemocentro
+                </a>
+            </div>
+
+            <!-- ACESSO RÁPIDO CARDS -->
+            <div class="mt-20">
+                <span class="inline-block px-3 py-1 bg-brand-cream text-brand-primary text-xs font-bold rounded-full uppercase tracking-widest mb-6">Acesso Rápido</span>
+                <h2 class="text-2xl font-bold text-brand-textDark mb-10">O que você procura hoje?</h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <a href="#necessidade" class="p-6 bg-white rounded-2xl border border-[#F0D8CB] hover:border-brand-primary/40 shadow-sm hover:shadow-md transition-all group flex flex-col items-center text-center">
+                        <div class="w-12 h-12 rounded-xl bg-brand-cream text-brand-primary flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-chart-bar"></i>
+                        </div>
+                        <h3 class="font-bold text-brand-textDark text-lg">Gráfico de Necessidade</h3>
+                        <p class="text-xs text-brand-textMuted mt-1">Urgência por tipo sanguíneo</p>
+                    </a>
+
+                    <a href="#posso-doar" class="p-6 bg-white rounded-2xl border border-[#F0D8CB] hover:border-brand-primary/40 shadow-sm hover:shadow-md transition-all group flex flex-col items-center text-center">
+                        <div class="w-12 h-12 rounded-xl bg-brand-cream text-brand-primary flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-clipboard-question"></i>
+                        </div>
+                        <h3 class="font-bold text-brand-textDark text-lg">Posso Doar?</h3>
+                        <p class="text-xs text-brand-textMuted mt-1">Simulador rápido de requisitos</p>
+                    </a>
+
+                    <a href="#bancos-sangue" class="p-6 bg-white rounded-2xl border border-[#F0D8CB] hover:border-brand-primary/40 shadow-sm hover:shadow-md transition-all group flex flex-col items-center text-center">
+                        <div class="w-12 h-12 rounded-xl bg-brand-cream text-brand-primary flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <h3 class="font-bold text-brand-textDark text-lg">Bancos de Sangue</h3>
+                        <p class="text-xs text-brand-textMuted mt-1">Encontre seu Hemocentro regional</p>
+                    </a>
+
+                    <a href="#dicas-mitos" class="p-6 bg-white rounded-2xl border border-[#F0D8CB] hover:border-brand-primary/40 shadow-sm hover:shadow-md transition-all group flex flex-col items-center text-center">
+                        <div class="w-12 h-12 rounded-xl bg-brand-cream text-brand-primary flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+                        <h3 class="font-bold text-brand-textDark text-lg">Dicas & Mitos</h3>
+                        <p class="text-xs text-brand-textMuted mt-1">Tabela de compatibilidade e dúvidas</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 1: GRÁFICO DE NECESSIDADE POR TIPO SANGUÍNEO -->
+        <section id="necessidade" class="py-16 bg-[#FFF4EC] border-y border-[#F3DEC3]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="px-3 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded-full uppercase tracking-wider">Níveis de Urgência</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-textDark mt-3">Gráfico de Necessidade por Tipo Sanguíneo</h2>
+                    <p class="text-brand-textMuted mt-2 max-w-2xl mx-auto text-sm sm:text-base">
+                        Veja os tipos sanguíneos com maior urgência nos bancos de sangue cadastrados. Quanto maior a porcentagem, mais crítica é a necessidade de doação.
+                    </p>
+                </div>
+
+                <div class="bg-brand-cream rounded-3xl p-6 sm:p-10 border border-[#ECC9B7] shadow-sm">
+                    <div class="flex flex-col lg:flex-row items-center justify-between gap-4 pb-8 border-b border-[#EACEC1]">
+                        <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-bold">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-brand-statusCritical"></span>
+                                <span class="text-brand-textDark">Crítico (Doação Urgente)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-brand-statusAlert"></span>
+                                <span class="text-brand-textDark">Alerta (Estoque Baixo)</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-brand-statusStable"></span>
+                                <span class="text-brand-textDark">Estável (Apenas Manutenção)</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <label for="regionFilter" class="text-xs font-bold uppercase text-brand-textMuted">Filtrar por Região:</label>
+                            <select id="regionFilter" onchange="window.updateNeedChart()" class="bg-white border border-[#DDBAA7] text-brand-textDark text-sm font-semibold rounded-xl px-4 py-2 focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                                <option value="br">Média Geral (Brasil)</option>
+                                <option value="sp">São Paulo & Região</option>
+                                <option value="rj">Rio de Janeiro & Região</option>
+                                <option value="pr">Paraná & Região</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="chartBarsContainer" class="mt-8 space-y-5">
+                        <!-- Renderizado via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: COMO FUNCIONA O PROCESSO DE DOAÇÃO -->
+        <section id="como-funciona" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="px-3 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded-full uppercase tracking-wider">Simples, Rápido e Seguro</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-textDark mt-3">Como Funciona o Processo Dona Vita?</h2>
+                <p class="text-brand-textMuted mt-2 max-w-2xl mx-auto text-sm sm:text-base">
+                    Todo o caminho da doação é acompanhado por profissionais capacitados, garantindo total conforto e biossegurança.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-[#F0D8CB] flex flex-col justify-between shadow-sm relative">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-primary text-white flex items-center justify-center text-xl font-bold mb-4 shadow-sm">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                        <span class="text-xs font-bold text-brand-primary uppercase tracking-wider">Etapa 1 • ~10 min</span>
+                        <h3 class="text-lg font-bold text-brand-textDark mt-1">Recepção & Cadastro</h3>
+                        <p class="text-xs text-brand-textMuted mt-2 leading-relaxed">
+                            Apresentação de documento oficial com foto, atualização de dados de contato e registro no sistema do hemocentro.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-[#F0D8CB] flex flex-col justify-between shadow-sm relative">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-primary text-white flex items-center justify-center text-xl font-bold mb-4 shadow-sm">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+                        <span class="text-xs font-bold text-brand-primary uppercase tracking-wider">Etapa 2 • ~15 min</span>
+                        <h3 class="text-lg font-bold text-brand-textDark mt-1">Triagem Clínica</h3>
+                        <p class="text-xs text-brand-textMuted mt-2 leading-relaxed">
+                            Entrevista confidencial para avaliar seu estado de saúde, checagem de sinais vitais, pressão arterial e teste de hemoglobina.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-[#F0D8CB] flex flex-col justify-between shadow-sm relative">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-primary text-white flex items-center justify-center text-xl font-bold mb-4 shadow-sm">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <span class="text-xs font-bold text-brand-primary uppercase tracking-wider">Etapa 3 • ~10 a 15 min</span>
+                        <h3 class="text-lg font-bold text-brand-textDark mt-1">A Coleta</h3>
+                        <p class="text-xs text-brand-textMuted mt-2 leading-relaxed">
+                            Coleta de aproximadamente 450 ml de sangue com material 100% descartável, estéril e sob supervisão especializada.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-[#F0D8CB] flex flex-col justify-between shadow-sm relative">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-brand-primary text-white flex items-center justify-center text-xl font-bold mb-4 shadow-sm">
+                            <i class="fa-solid fa-cookie-bite"></i>
+                        </div>
+                        <span class="text-xs font-bold text-brand-primary uppercase tracking-wider">Etapa 4 • ~15 min</span>
+                        <h3 class="text-lg font-bold text-brand-textDark mt-1">Lanche & Repouso</h3>
+                        <p class="text-xs text-brand-textMuted mt-2 leading-relaxed">
+                            Momento de relaxar, hidratar-se e desfrutar do lanche oferecido para restabelecer os níveis de energia do seu corpo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 bg-brand-cream border border-[#ECCCA9] rounded-2xl p-6 sm:p-8">
+                <h3 class="text-lg font-bold text-brand-primary flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-list-check"></i> Guia rápido: o que levar e quais procedimentos seguir
+                </h3>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm text-brand-textDark">
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-check text-brand-primary mt-1"></i>
+                        <span><strong>Leve:</strong> um documento oficial com foto (RG, CNH, passaporte ou carteira profissional).</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-check text-brand-primary mt-1"></i>
+                        <span><strong>Antes:</strong> durma bem (6 a 8 h), hidrate-se, alimente-se normalmente e evite alimentos gordurosos nas 3 horas anteriores. Não doe em jejum.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-check text-brand-primary mt-1"></i>
+                        <span><strong>Evite:</strong> bebidas alcoólicas nas 12 horas anteriores à doação.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-check text-brand-primary mt-1"></i>
+                        <span><strong>Depois:</strong> descanse, beba bastante líquido, mantenha o curativo por 4 horas e evite esforço físico intenso e fumar por algumas horas.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-check text-brand-primary mt-1"></i>
+                        <span><strong>Intervalo entre doações:</strong> homens a cada 60 dias (até 4 por ano); mulheres a cada 90 dias (até 3 por ano).</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-check text-brand-primary mt-1"></i>
+                        <span><strong>Requisitos básicos:</strong> ter entre 16 e 69 anos (menores de 18 com autorização dos responsáveis), pesar no mínimo 50 kg e estar em boa saúde.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: QUESTIONÁRIO / SIMULADOR "POSSO DOAR HOJE?" -->
+        <section id="posso-doar" class="py-16 bg-[#FFF4EC] border-y border-[#F3DEC3]">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-brand-cream border border-[#ECCCA9] rounded-3xl shadow-lg overflow-hidden">
+                    <div class="bg-brand-primary px-6 py-6 text-white text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white mb-2">
+                            <i class="fa-solid fa-clipboard-check text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold">Simulador Dona Vita: Posso Doar Hoje?</h2>
+                        <p class="text-xs sm:text-sm text-red-100 mt-1">Responda a 5 perguntas rápidas e descubra sua aptidão prévia para doação.</p>
+                    </div>
+
+                    <div class="p-6 sm:p-10" id="quizContainer">
+                        <div class="mb-8">
+                            <div class="flex justify-between text-xs font-bold text-brand-textMuted uppercase mb-2">
+                                <span id="quizStepText">Pergunta 1 de 5</span>
+                                <span id="quizPercentText">20%</span>
+                            </div>
+                            <div class="w-full bg-[#E8D1C3] h-2.5 rounded-full overflow-hidden">
+                                <div id="quizProgressBar" class="bg-brand-primary h-full transition-all duration-300 w-1/5"></div>
+                            </div>
+                        </div>
+
+                        <div id="quizQuestionBox" class="space-y-6">
+                            <!-- Injetado por JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4: GUIA DOS HEMOCENTROS E LOCALIZAÇÃO POR CIDADE -->
+        <section id="bancos-sangue" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div>
+                    <span class="px-3 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded-full uppercase tracking-wider">Localize & Agende</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-textDark mt-2">Bancos de Sangue & Hemocentros</h2>
+                    <p class="text-brand-textMuted mt-1 text-sm sm:text-base">
+                        Pesquise por sua cidade e confira o nível do estoque de sangue.
+                    </p>
+                </div>
+
+                <div class="w-full md:w-96 flex gap-2">
+                    <div class="relative flex-grow">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-brand-textMuted"></i>
+                        <input type="text" id="citySearchInput" onkeyup="window.filterHemocenters()" placeholder="Digite a cidade (ex: Itapetininga, SP)" class="w-full pl-11 pr-4 py-3 bg-white border border-[#E0C4B5] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark shadow-sm font-medium">
+                    </div>
+                    <button onclick="window.useMyLocation()" title="Usar minha localização" class="px-4 py-3 bg-brand-primary text-white rounded-xl text-sm font-bold hover:bg-brand-primaryDark transition-colors flex items-center gap-2 whitespace-nowrap shadow-sm">
+                        <i class="fa-solid fa-crosshairs"></i> <span class="hidden sm:inline">Perto de mim</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="hemocentersGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Cards JS -->
+            </div>
+            
+            <div id="noHemocentersMsg" class="hidden text-center py-12 bg-white rounded-2xl border border-dashed border-[#D8B4A0]">
+                <i class="fa-solid fa-hospital-user text-4xl text-brand-textMuted mb-3"></i>
+                <p class="font-bold text-brand-textDark">Nenhum hemocentro encontrado para essa busca.</p>
+                <p class="text-xs text-brand-textMuted mt-1">Tente pesquisar por "Itapetininga", "São Paulo", "Rio de Janeiro" ou limpe a busca.</p>
+                <button onclick="window.resetHemocenterSearch()" class="mt-4 px-4 py-2 bg-brand-cream border border-[#D8B4A0] rounded-xl text-xs font-bold text-brand-primary hover:bg-brand-primary hover:text-white transition-all">
+                    Mostrar Todos os Hemocentros
+                </button>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 5: MURAL DE COMPATIBILIDADE, MITOS E VERDADES -->
+        <section id="dicas-mitos" class="py-16 bg-[#FFF4EC] border-y border-[#F3DEC3]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <span class="px-3 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded-full uppercase tracking-wider">Conhecimento Vital Dona Vita</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-textDark mt-2">Mural de Dicas & Compatibilidade</h2>
+                </div>
+
+                <div class="flex justify-center border-b border-[#ECC8B5] mb-8">
+                    <button onclick="window.switchTab('compatibilidade')" id="tabBtnCompatibilidade" class="px-6 py-3 font-bold text-sm border-b-2 border-brand-primary text-brand-primary flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-diagram-project"></i> Tabela de Compatibilidade
+                    </button>
+                    <button onclick="window.switchTab('mitos')" id="tabBtnMitos" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-brand-textMuted hover:text-brand-primary flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-lightbulb"></i> Mitos vs Verdades
+                    </button>
+                    <button onclick="window.switchTab('dicas')" id="tabBtnDicas" class="px-6 py-3 font-bold text-sm border-b-2 border-transparent text-brand-textMuted hover:text-brand-primary flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-hand-holding-medical"></i> Dicas Pré e Pós
+                    </button>
+                </div>
+
+                <div id="tabCompatibilidade" class="block">
+                    <div class="bg-brand-cream border border-[#E9C8B5] rounded-3xl p-6 sm:p-8 overflow-x-auto shadow-sm">
+                        <h3 class="text-center font-bold text-brand-textDark text-lg mb-6">Matriz de Transfusão Sanguínea</h3>
+                        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                            <thead>
+                                <tr class="border-b border-[#DEC0AE] text-brand-primary uppercase tracking-wider">
+                                    <th class="p-3 font-extrabold">Tipo Sanguíneo</th>
+                                    <th class="p-3 font-extrabold">Pode Doar Para</th>
+                                    <th class="p-3 font-extrabold">Pode Receber De</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[#EAD2C3]">
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">O-</td>
+                                    <td class="p-3 font-semibold"><span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-bold">Todos (Doador Universal)</span></td>
+                                    <td class="p-3">Apenas O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">O+</td>
+                                    <td class="p-3">A+, B+, AB+, O+</td>
+                                    <td class="p-3">O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">A-</td>
+                                    <td class="p-3">A+, A-, AB+, AB-</td>
+                                    <td class="p-3">A-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">A+</td>
+                                    <td class="p-3">AB+, A+</td>
+                                    <td class="p-3">A+, A-, O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">B-</td>
+                                    <td class="p-3">B+, B-, AB+, AB-</td>
+                                    <td class="p-3">B-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">B+</td>
+                                    <td class="p-3">B+, AB+</td>
+                                    <td class="p-3">B+, B-, O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">AB-</td>
+                                    <td class="p-3">AB+, AB-</td>
+                                    <td class="p-3">A-, B-, AB-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-white/60 transition-colors">
+                                    <td class="p-3 font-black text-brand-primary">AB+</td>
+                                    <td class="p-3">Apenas AB+</td>
+                                    <td class="p-3"><span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-bold">Todos (Receptor Universal)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tabMitos" class="hidden space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-[#E9C8B5] shadow-sm">
+                            <span class="inline-block bg-red-100 text-red-700 text-[10px] font-black uppercase px-2 py-0.5 rounded mb-2">Mito</span>
+                            <h4 class="font-bold text-brand-textDark text-base">"Doar sangue afina ou engrossa o sangue."</h4>
+                            <p class="text-xs text-brand-textMuted mt-1">FALSO. O volume doado é reposto rapidamente e a densidade sanguínea permanece normal.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-[#E9C8B5] shadow-sm">
+                            <span class="inline-block bg-green-100 text-green-700 text-[10px] font-black uppercase px-2 py-0.5 rounded mb-2">Verdade</span>
+                            <h4 class="font-bold text-brand-textDark text-base">"Uma única doação pode salvar até 4 vidas."</h4>
+                            <p class="text-xs text-brand-textMuted mt-1">VERDADEIRO. O sangue doado é fracionado em hemácias, plaquetas, plasma e crioprecipitado.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-[#E9C8B5] shadow-sm">
+                            <span class="inline-block bg-red-100 text-red-700 text-[10px] font-black uppercase px-2 py-0.5 rounded mb-2">Mito</span>
+                            <h4 class="font-bold text-brand-textDark text-base">"Quem tem tatuagem nunca mais pode doar sangue."</h4>
+                            <p class="text-xs text-brand-textMuted mt-1">FALSO. É necessário apenas aguardar de 6 a 12 meses após a realização da tatuagem ou maquiagem definitiva.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl border border-[#E9C8B5] shadow-sm">
+                            <span class="inline-block bg-green-100 text-green-700 text-[10px] font-black uppercase px-2 py-0.5 rounded mb-2">Verdade</span>
+                            <h4 class="font-bold text-brand-textDark text-base">"Doador tem direito a folga do trabalho."</h4>
+                            <p class="text-xs text-brand-textMuted mt-1">VERDADEIRO. Pela CLT (Art. 473), o trabalhador pode se ausentar 1 dia a cada 12 meses para doação voluntária.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tabDicas" class="hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-[#E9C8B5] shadow-sm">
+                            <h4 class="font-bold text-brand-primary text-lg flex items-center gap-2 mb-3">
+                                <i class="fa-solid fa-mug-hot"></i> Antes de Doar
+                            </h4>
+                            <ul class="text-xs space-y-2 text-brand-textMuted list-disc list-inside">
+                                <li>Durma ao menos 6 horas consecutivas na noite anterior.</li>
+                                <li>Alimente-se bem, mas evite refeições gordurosas nas 3 horas anteriores.</li>
+                                <li>Beba bastante água no dia anterior e no dia da doação.</li>
+                                <li>Não consuma bebidas alcoólicas nas últimas 12 horas.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-[#E9C8B5] shadow-sm">
+                            <h4 class="font-bold text-brand-primary text-lg flex items-center gap-2 mb-3">
+                                <i class="fa-solid fa-bed"></i> Depois de Doar
+                            </h4>
+                            <ul class="text-xs space-y-2 text-brand-textMuted list-disc list-inside">
+                                <li>Coma o lanche oferecido pelo hemocentro e descanse por 15 minutos.</li>
+                                <li>Tome bastante líquido ao longo de todo o dia.</li>
+                                <li>Mantenha o curativo no braço por pelo menos 4 horas.</li>
+                                <li>Evite esforço físico intenso e exercícios pesados no dia da doação.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 6: MURAL DONA VITA -->
+        <section id="mural" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="px-3 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded-full uppercase tracking-wider">Feed da Comunidade</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-textDark mt-2">Mural Dona Vita de Depoimentos & Campanhas</h2>
+                <p class="text-brand-textMuted mt-1 max-w-2xl mx-auto text-sm sm:text-base">
+                    Veja como pequenos gestos mantêm os batimentos do mundo vivos. Confira avisos dos hemocentros e relatos da comunidade!
+                </p>
+            </div>
+
+            <div id="muralFeedGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Posts JS -->
+            </div>
+
+            <div class="mt-16 bg-white border border-[#E1C5B6] rounded-3xl p-6 sm:p-10 max-w-2xl mx-auto shadow-sm">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-brand-textDark">Deixe sua mensagem no Mural Dona Vita</h3>
+                    <p class="text-xs text-brand-textMuted mt-1">Seu depoimento impulsiona mais pessoas a doarem!</p>
+                </div>
+
+                <form onsubmit="window.handleDonorMessage(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">Seu Nome</label>
+                        <input type="text" id="muralDonorName" required placeholder="Ex: Maria Silva" class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">Seu Perfil</label>
+                        <select id="muralDonorRole" class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark font-medium">
+                            <option value="Doador Frequente">Doador Frequente</option>
+                            <option value="Doador de Primeira Viagem">Doador de Primeira Viagem</option>
+                            <option value="Receptora Agradecida">Receptor / Familiar Agradecido</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">Sua Mensagem</label>
+                        <textarea id="muralDonorMessage" rows="3" required placeholder="Escreva aqui seu depoimento..." class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 bg-brand-primary text-white font-bold rounded-xl text-sm hover:bg-brand-primaryDark transition-colors shadow-md">
+                        Publicar no Mural Dona Vita
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-textDark text-brand-cream py-12 border-t border-[#402A20]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+                <div class="flex items-center justify-center sm:justify-start gap-2">
+                    <i class="fa-solid fa-heart-pulse text-brand-primary text-xl"></i>
+                    <span class="text-xl font-black text-white tracking-tight">Dona Vita</span>
+                </div>
+                <p class="text-xs text-brand-textMuted/80 mt-2 max-w-sm">
+                    Plataforma de conscientização e apoio à doação de sangue no Brasil. Conectando doadores a quem mais precisa.
+                </p>
+            </div>
+
+            <div class="text-xs text-brand-textMuted/70 text-center sm:text-right">
+                <p>© 2026 Dona Vita • Todos os direitos reservados.</p>
+                <p class="mt-1">Em caso de emergência médica urgente, procure o hospital mais próximo ou ligue 192 (SAMU).</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOTÃO FLUTUANTE DE POSTAGEM (APENAS PARA LOGIN DE HEMOCENTRO) -->
+    <div id="hemocentroFabButton" class="hidden fixed bottom-6 right-6 z-30">
+        <button onclick="window.openPostModal()" class="flex items-center gap-3 bg-brand-primary hover:bg-brand-primaryDark text-white px-5 py-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 group border-2 border-white">
+            <i class="fa-solid fa-plus text-xl group-hover:rotate-90 transition-transform"></i>
+            <span class="font-extrabold text-sm tracking-wide">Postar no Mural</span>
+        </button>
+    </div>
+
+    <!-- MODAL DE AUTENTICAÇÃO -->
+    <div id="authModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl border border-[#E8D1C3]">
+            <button onclick="window.closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-brand-textDark text-xl p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex bg-brand-cream p-1 rounded-2xl mb-6">
+                <button id="authTabDonor" onclick="window.setAuthUserType('doador')" class="flex-1 py-2 text-xs font-bold rounded-xl bg-brand-primary text-white transition-all">
+                    <i class="fa-solid fa-user mr-1"></i> Doador
+                </button>
+                <button id="authTabHemocenter" onclick="window.setAuthUserType('hemocentro')" class="flex-1 py-2 text-xs font-bold rounded-xl text-brand-textMuted hover:text-brand-primary transition-all">
+                    <i class="fa-solid fa-hospital mr-1"></i> Hemocentro
+                </button>
+            </div>
+
+            <h3 id="authModalTitle" class="text-2xl font-black text-brand-textDark text-center mb-1">Entrar no Dona Vita</h3>
+            <p id="authModalSubtitle" class="text-xs text-brand-textMuted text-center mb-6">Acesse sua conta para continuar</p>
+
+            <form onsubmit="window.handleAuthSubmit(event)" class="space-y-4">
+                <input type="hidden" id="authMode" value="login">
+                <input type="hidden" id="authUserType" value="doador">
+
+                <div id="registerNameGroup" class="hidden">
+                    <label class="block text-xs font-bold uppercase text-brand-textDark mb-1" id="nameLabel">Nome Completo</label>
+                    <input type="text" id="authName" placeholder="Ex: Ana Souza" class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark">
+                </div>
+
+                <div id="registerCityGroup" class="hidden">
+                    <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">Cidade e UF</label>
+                    <input type="text" id="authCity" placeholder="Ex: Itapetininga, SP" class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">E-mail</label>
+                    <input type="email" id="authEmail" required placeholder="seu@email.com" class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">Senha</label>
+                    <input type="password" id="authPassword" required placeholder="••••••••" class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark">
+                </div>
+
+                <div id="newsletterCheckboxGroup" class="hidden flex items-start gap-2 pt-2">
+                    <input type="checkbox" id="newsletterCheck" class="mt-1 w-4 h-4 text-brand-primary focus:ring-brand-primary border-gray-300 rounded cursor-pointer">
+                    <label for="newsletterCheck" class="text-xs text-brand-textMuted cursor-pointer leading-tight">
+                        Deseja receber notícias, campanhas urgentes e novidades sobre doação de sangue por e-mail?
+                    </label>
+                </div>
+
+                <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-brand-primary text-white font-bold rounded-xl text-sm hover:bg-brand-primaryDark transition-colors shadow-md mt-4">
+                    Entrar
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-xs">
+                <span id="authToggleQuestion" class="text-brand-textMuted">Ainda não tem conta?</span>
+                <button type="button" onclick="window.toggleAuthMode()" id="authToggleBtn" class="font-bold text-brand-primary ml-1 hover:underline">
+                    Cadastrar-se
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PUBLICAÇÃO DO HEMOCENTRO -->
+    <div id="postModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl border border-[#E8D1C3]">
+            <button onclick="window.closePostModal()" class="absolute top-4 right-4 text-gray-400 hover:text-brand-textDark text-xl p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-brand-textDark">Nova Publicação no Mural</h3>
+                    <p class="text-xs text-brand-textMuted">Exclusivo para Hemocentros Parceiros</p>
+                </div>
+            </div>
+
+            <form onsubmit="window.handlePostSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">Imagem da Publicação</label>
+                    <div class="flex gap-2 mb-2 text-xs font-bold">
+                        <button type="button" onclick="window.setImageSourceType('url')" id="imgSrcUrlBtn" class="flex-1 py-1.5 rounded-lg border border-brand-primary bg-brand-cream text-brand-primary">
+                            Inserir URL
+                        </button>
+                        <button type="button" onclick="window.setImageSourceType('file')" id="imgSrcFileBtn" class="flex-1 py-1.5 rounded-lg border border-gray-300 text-brand-textMuted">
+                            Arquivo do Computador
+                        </button>
+                    </div>
+
+                    <div id="imageInputUrlGroup">
+                        <input type="url" id="postImageUrl" placeholder="https://exemplo.com/imagem.jpg" class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark">
+                    </div>
+
+                    <div id="imageInputFileGroup" class="hidden">
+                        <input type="file" id="postImageFile" accept="image/*" onchange="window.previewSelectedImage(event)" class="w-full text-xs text-brand-textMuted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-primary file:text-white hover:file:bg-brand-primaryDark cursor-pointer">
+                    </div>
+                </div>
+
+                <div id="imagePreviewContainer" class="hidden my-2 border rounded-2xl overflow-hidden max-h-48 bg-gray-50 flex items-center justify-center">
+                    <img id="imagePreview" src="" alt="Prévia" class="max-h-48 object-cover w-full">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase text-brand-textDark mb-1">Legenda / Texto da Campanha</label>
+                    <textarea id="postCaption" rows="3" required placeholder="Escreva a mensagem da sua campanha, urgência de estoques ou informe de atendimento..." class="w-full px-4 py-2.5 bg-brand-cream border border-[#DEC0AE] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary text-brand-textDark"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-brand-primary text-white font-bold rounded-xl text-sm hover:bg-brand-primaryDark transition-colors shadow-md">
+                    Publicar Agora
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastNotification" class="hidden fixed top-24 right-6 z-50 bg-brand-textDark text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-white/20 transition-all duration-300 transform">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-green-400 text-xl"></i>
+        <div>
+            <h5 id="toastTitle" class="font-bold text-sm">Notificação</h5>
+            <p id="toastMessage" class="text-xs text-gray-200">Ação realizada com sucesso!</p>
+        </div>
+    </div>
+
+    <!-- Arquivo JS Externo -->
+    <script src="app.js"></script>
+</body>
+</html>
